@@ -6,7 +6,9 @@ public class Line extends Shape {
 
     @Override
     public void draw(Graphics g) {
-
+        g.setPaintMode();
+        g.setColor(Color.BLUE);
+        g.drawLine(getX(), getY(), 100, 100);
     }
 
 }
