@@ -2,6 +2,7 @@ package name.nxw.uta.cse5322.drawing.shape;
 
 import java.awt.*;
 
+// Expert pattern
 public abstract class Shape {
 
     private int x;

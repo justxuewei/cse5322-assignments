@@ -4,6 +4,7 @@ import name.nxw.uta.cse5322.drawing.shape.Shape;
 
 import java.util.List;
 
+// Command pattern
 public interface Command {
 
     void execute(List<Shape> undoStack, List<Shape> redoStack);

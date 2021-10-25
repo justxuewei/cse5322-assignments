@@ -23,6 +23,7 @@ public class PatternController {
 
     private ShapeEnum currentShape = ShapeEnum.Box;
 
+    // Composite pattern
     private final List<Shape> stack = new ArrayList<>();
     private final List<Shape> redoStack = new ArrayList<>();
 
@@ -105,6 +106,7 @@ public class PatternController {
         }
     }
 
+    // Iterator pattern is used for rendering graph.
     private void rerenderStack() {
         Graphics g = this.shapeGUI.getCanvas().getGraphics();
         g.clearRect(0, 0, shapeGUI.getCanvas().getWidth(), shapeGUI.getCanvas().getHeight());
