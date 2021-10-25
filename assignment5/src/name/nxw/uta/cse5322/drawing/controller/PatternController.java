@@ -11,11 +11,14 @@ import name.nxw.uta.cse5322.drawing.shape.Shape;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class PatternController {
 
@@ -32,6 +35,41 @@ public class PatternController {
     private final Redo redo = new Redo();
     private final ClearRedo clearRedo = new ClearRedo();
 
+    private final ActionListener shapeButtonListener = e -> {
+        resetRedoStackIfNeeds();
+
+        switch (e.getActionCommand()) {
+            case "Box":
+                currentShape = ShapeEnum.Box;
+                break;
+            case "Line":
+                currentShape = ShapeEnum.Line;
+                break;
+            case "Circle":
+                currentShape = ShapeEnum.Circle;
+                break;
+        }
+    };
+
+    private final ActionListener undoRedoButtonListener = e -> {
+        if (Objects.equals(e.getActionCommand(), "Undo")) {
+            if (stack.size() == 0) {
+                System.out.println("Undo is not available for now.");
+                return;
+            }
+            this.undoFlag = true;
+            undo.execute(stack, redoStack);
+        } else {
+            if (redoStack.size() == 0) {
+                System.out.println("Redo is not available for now.");
+                return;
+            }
+            redo.execute(stack, redoStack);
+        }
+
+        rerenderStack();
+    };
+
     public PatternController() {
         this.shapeGUI = new ShapeGUI();
         this.shapeGUI.setVisible(true);
@@ -39,41 +77,11 @@ public class PatternController {
     }
 
     public void listenEvents() {
-        this.shapeGUI.getBoxButton().addActionListener(e -> {
-            resetRedoStackIfNeeds();
-            currentShape = ShapeEnum.Box;
-        });
-
-        this.shapeGUI.getLineButton().addActionListener(e -> {
-            resetRedoStackIfNeeds();
-            currentShape = ShapeEnum.Line;
-        });
-
-        this.shapeGUI.getCircleButton().addActionListener(e -> {
-            resetRedoStackIfNeeds();
-            currentShape = ShapeEnum.Circle;
-        });
-
-        this.shapeGUI.getUndoButton().addActionListener(e -> {
-            if (stack.size() == 0) {
-                System.out.println("Undo is not available for now.");
-                return;
-            }
-            this.undoFlag = true;
-
-            undo.execute(stack, redoStack);
-            rerenderStack();
-        });
-
-        this.shapeGUI.getRedoButton().addActionListener(e -> {
-            if (redoStack.size() == 0) {
-                System.out.println("Redo is not available for now.");
-                return;
-            }
-
-            redo.execute(stack, redoStack);
-            rerenderStack();
-        });
+        this.shapeGUI.getBoxButton().addActionListener(this.shapeButtonListener);
+        this.shapeGUI.getLineButton().addActionListener(this.shapeButtonListener);
+        this.shapeGUI.getCircleButton().addActionListener(this.shapeButtonListener);
+        this.shapeGUI.getUndoButton().addActionListener(this.undoRedoButtonListener);
+        this.shapeGUI.getRedoButton().addActionListener(this.undoRedoButtonListener);
 
         this.shapeGUI.getCanvas().addMouseListener(new MouseAdapter() {
             @Override
