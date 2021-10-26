@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: name.nxw.uta.cse5322.drawing.MainApplication
+
